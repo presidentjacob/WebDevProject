@@ -1,1 +1,22 @@
+We are naming our website "sort.io" 
 
+We are going to make a general collection database website to keep track of anything that
+you may want. We plan to have a feature where there could be different tabs for different
+collections, so it doesn't limit what the collection may be of (ex. one collection could be
+movies, another CD's, another being collector's cards, etc). This could be possible if when
+entering an item, you would just need a picture taken by the user and then you could
+choose to add a description, rating, number of that item, value, and which collection it'll
+go in. We also plan on implementing APIs to remove the need of taking photos. There are
+a lot of database collection applications that are specific to different things on app stores
+(for example, CLZ.com for CD's, Letterboxd for movies, etc). However, I do not know of
+one that can encompass multiple medias.
+
+Due to the feature that lets you add any type of collection you'd like, everyone at every
+age can use this (as long as they have a collection of something). No matter if it's
+Pokémon cards or fancy plates, anyone with a collection can keep track of what they
+own. Each person could have a login so we can store individual data.
+
+Features: Possible to add multiple collections of any item. For each object added to a
+collection, we will add a description, rating, number of that item, value, and which
+collection it'll go in. Of course, make these optional to fill out in case it doesn't apply to
+that collection specifically.
