@@ -1,9 +1,5 @@
-nav .navigation {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: lightgray;
+body {
+    margin: 0;
 }
 
 .navigation {
@@ -11,9 +7,14 @@ nav .navigation {
     justify-self: center;
     list-style: none;
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 2.5rem;
-    margin: 0 auto;
-    padding: 0;
+    width: 100%;
+    margin: 0;
+    padding: 15px 0;
+    background-color: darkgray;;
+    border-bottom: 2px solid black;
 }
 
 .navigation .nav-link {
@@ -44,6 +45,6 @@ nav .nav-link:hover::after {
 }
 
 nav .nav-link:hover {
-    background-color: lightgray;
+    background-color: gray;
     border-radius: 4px;
 }
