@@ -1,5 +1,89 @@
+:root {
+    --log-green: #27b147;
+}
+
 body {
     margin: 0;
+}
+
+.content {
+    padding: 24px;
+}
+
+.item-form-panel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+}
+
+.item-form-panel.is-open {
+    display: block;
+}
+
+.item-form {
+    max-width: 1000px;
+    margin: 24px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.form-left {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-right {
+    display: flex;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #b7b7b7;
+    border-radius: 4px;
+    font: inherit;
+}
+
+.form-right textarea {
+    min-height: 240px;
+    resize: vertical;
+}
+
+.submit-button {
+    width: 10%;
+    transform: translateY(-50%);
+    background: var(--log-green);
+    border-radius: 4px;
+    padding: 8px 14px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.submit-button:hover {
+    background: #1e8c3a;
+    transform: translateY(-50%) scale(1.05);
 }
 
 .navigation {
@@ -9,6 +93,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     gap: 2.5rem;
     width: 100%;
     margin: 0;
@@ -47,4 +132,22 @@ nav .nav-link:hover::after {
 nav .nav-link:hover {
     background-color: gray;
     border-radius: 4px;
+}
+
+nav .new-item {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--log-green);
+    border-radius: 4px;
+    padding: 8px 14px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+nav .new-item:hover {
+    background: #1e8c3a;
+    transform: translateY(-50%) scale(1.05);
 }

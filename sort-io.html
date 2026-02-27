@@ -12,6 +12,59 @@
         <a href="sort-io.html" class="nav-link">Sort IO</a>
         <a href="lists.html" class="nav-link">Lists</a>
         <a href="profile.html" class="nav-link">Profile</a>
+        <button type="button" class="new-item">Log Item</button>
     </nav>
+
+    <main class="content">
+        <h1>Sort IO</h1>
+        <p>Welcome to the Sort IO page! Here you can manage and sort your input/output data efficiently. Use the navigation bar to access different sections of the application, and click on "Log Item" to add new entries to your data list.</p>
+        <p>Sort IO allows you to organize your data in a way that suits your needs. You can sort by date, name, or any other criteria you choose. Keep track of your items and stay organized with Sort IO!</p>
+        <p>Click on "Log Item" to open the form and start adding your data entries.</p>
+        <p>Happy sorting!</p>
+    </main>
+
+    <section id="item-form-panel" class="item-form-panel" aria-hidden="true">
+        <form class="item-form">
+            <div class="form-group image-upload">
+                <label for="image">Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+
+            <div class="form-layout">
+                <div class="form-left">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-count">Number of Items</label>
+                        <input type="number" id="item-count" name="item-count">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="value">Value</label>
+                        <input type="text" id="value" name="value">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collection">Collection</label>
+                        <input type="text" id="collection" name="collection">
+                    </div>
+                </div>
+
+                <div class="form-right">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </section>
+
+    <script src="sort-io.js"></script>
 </body>
 </html>
