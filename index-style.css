@@ -30,6 +30,24 @@ nav .nav-link:hover {
     background-color: gray;
 }
 
+.new-item {
+    border: 2px solid black;
+    background: var(--log-green);
+    color: white;
+    padding: 8px 14px;
+    min-height: 36px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.1;
+    font-weight: 600;
+    text-transform: lowercase;
+}
+
+.new-item:hover {
+    background: #1e8c3a;
+}
+
 .top-section {
     display: flex;
     flex-direction: row;
@@ -116,4 +134,40 @@ nav .nav-link:hover {
     justify-content: center;
     margin-bottom: 12px;
     color: #aaa;
+}
+
+.item-form-panel {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    padding: 20px;
+}
+
+.item-form-panel.is-open {
+    display: flex;
+}
+
+.item-form {
+    position: relative;
+    width: min(900px, 100%);
+    background: white;
+    border: 3px solid black;
+    padding: 24px;
+}
+
+.close-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border: 2px solid black;
+    background: white;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
 }
