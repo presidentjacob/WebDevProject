@@ -1,103 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sort IO</title>
-    <link rel="stylesheet" href="sort-io.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort.io</title>
+  <link rel="stylesheet" href="index-style.css">
 </head>
 <body>
-    <nav class="navigation">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="sort-io.html" class="nav-link">Sort IO</a>
-        <a href="lists.html" class="nav-link">Lists</a>
-        <a href="profile.html" class="nav-link">Profile</a>
-        <a href="#" class="nav-link">Contact Us</a>
-        <a href="#" class="nav-link">About Us</a>
-        <button type="button" class="new-item">Log Item</button>
+
+  <nav class="navigation">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="sort-io.html" class="nav-link">Sort IO</a>
+      <a href="lists.html" class="nav-link">Lists</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+      <a href="#" class="nav-link">Contact Us</a>
+      <a href="#" class="nav-link">About Us</a>
+      <button type="button" class="new-item">Log Item</button>
     </nav>
 
-    <section class="intro">
-      <div class="intro-tagline">
-        <h1>The Only Collection Database You'll Ever Need!</h1>
-      </div>
+  <div class="top-section">
+    <div class="top-tagline">
+      <h1>The Only Collection Database You'll Ever Need!</h1>
+    </div>
 
-      <div class="login-card">
-        <h2>Sort.io</h2>
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="">
-        <button type="button">Login</button>
-      </div>
-    </section>
+    <div class="login-card">
+      <h2>Sort.io</h2>
+      <label for="username">Username</label>
+      <input type="text" id="username">
+      <label for="password">Password</label>
+      <input type="password" id="password">
+      <button type="button">Login</button>
+    </div>
+  </div>
 
-    <section class="steps-section">
-      <div class="steps-grid">
-    
-        <div class="step-card">
-          <div class="step-label">Step 1</div>
-          <div class="step-img">IMG</div>
-          <p class="step-desc">Description</p>
-        </div>
-    
-        <div class="step-card">
-          <div class="step-label">Step 2</div>
-          <div class="step-img">IMG</div>
-          <p class="step-desc">Description</p>
-        </div>
-    
-        <div class="step-card">
-          <div class="step-label">Step 3</div>
-          <div class="step-img">IMG</div>
-          <p class="step-desc">Description</p>
-        </div>
-    
-      </div>
-    </section>
+  <div class="steps-section">
+    <div class="step-card">
+      <div class="step-label">Step 1</div>
+      <div class="step-img">IMG</div>
+      <p>Description</p>
+    </div>
+    <div class="step-card">
+      <div class="step-label">Step 2</div>
+      <div class="step-img">IMG</div>
+      <p>Description</p>
+    </div>
+    <div class="step-card">
+      <div class="step-label">Step 3</div>
+      <div class="step-img">IMG</div>
+      <p>Description</p>
+    </div>
+  </div>
 
-    <section id="item-form-panel" class="item-form-panel" aria-hidden="true">
-        <form class="item-form">
-            <div class="form-group image-upload">
-                <label for="image">Image</label>
-                <input type="file" id="image" name="image" accept="image/*">
-            </div>
-
-            <div class="form-layout">
-                <div class="form-left">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="item-count">Number of Items</label>
-                        <input type="number" id="item-count" name="item-count">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="value">Value</label>
-                        <input type="text" id="value" name="value">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="collection">Collection</label>
-                        <input type="text" id="collection" name="collection">
-                    </div>
-                </div>
-
-                <div class="form-right">
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <button type="submit" class="submit-button">Submit</button>
-        </form>
-    </section>
-
-    <script src="sort-io.js"></script>
 </body>
 </html>
