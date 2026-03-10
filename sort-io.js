@@ -1,3 +1,10 @@
+// check if user is logged in
+const user = localStorage.getItem("currentUser");
+
+if (!user) {
+    window.location.href = "index.html";
+}
+
 const logItemButton = document.querySelector(".new-item");
 const itemFormPanel = document.querySelector("#item-form-panel");
 const closeFormButton = document.querySelector(".close-form");
