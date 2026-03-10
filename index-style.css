@@ -69,10 +69,11 @@ nav .nav-link:hover {
 .login-card {
     background-color: var(--blue);
     border: 3px solid black;
-    padding: 30px 25px;
-    width: 320px;
-    flex-shrink: 0;
+    padding: 35px 30px;
+    width: 340px;
     text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
 }
 
 .login-card label {
@@ -84,24 +85,40 @@ nav .nav-link:hover {
 
 .login-card input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #b7b7b7;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
     font: inherit;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card input:focus {
+    border-color: var(--log-green);
+    outline: none;
+    box-shadow: 0 0 5px rgba(39,177,71,0.4);
+}
+
+.login-card h2 {
+    margin-bottom: 15px;
+    font-size: 26px;
 }
 
 .login-card button {
     margin-top: 20px;
-    padding: 8px 30px;
+    padding: 12px 40px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     background: var(--log-green);
     color: white;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: transform 0.15s ease, background 0.3s ease;
 }
 
 .login-card button:hover {
     background: #1e8c3a;
+    transform: translateY(-2px);
 }
 
 .steps-section {
