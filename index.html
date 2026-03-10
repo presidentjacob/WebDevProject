@@ -90,6 +90,25 @@
             </div>
         </form>
     </section>
+  <script>
+    document.getElementById("loginBtn").addEventListener("click", function () {
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+  
+    if(username === "" || password === ""){
+      alert("Please enter username and password");
+      return;
+    }
+  
+    // store logged in user
+    localStorage.setItem("currentUser", username);
+  
+    // redirect to collections page
+    window.location.href = "sort-io.html";
+  
+  });
+</script>
       <script src="sort-io.js"></script>
 </body>
 </html>
