@@ -11,30 +11,36 @@
     <nav class="navigation">
       <a href="index.html" class="nav-link">Home</a>
       <a href="sort-io.html" class="nav-link">Sort IO</a>
-      <a href="lists.html" class="nav-link">Lists</a>
+      <a href="sort-io.html" class="nav-link">Lists</a>
       <a href="profile.html" class="nav-link">Profile</a>
       <a href="#" class="nav-link">Contact Us</a>
       <a href="#" class="nav-link">About Us</a>
-      <button type="button" class="new-item" aria-label="Log item" title="Log item">log item</button>
+      <button type="button" class="new-item" id="new-list-shortcut" aria-label="Create list" title="Create list">new list</button>
     </nav>
 
     <div class="list-section">
       <h1>Your Lists</h1>
-      <div class="list-card">
-        <h2>List Title</h2>
-        <p>List description goes here. This is a brief overview of what the list is about.</p>
-        <button type="button">View List</button>
-      </div>
-      <div class="list-card">
-        <h2>List Title</h2>
-        <p>List description goes here. This is a brief overview of what the list is about.</p>
-        <button type="button">View List</button>
-      </div>
-      <div class="list-card">
-        <h2>List Title</h2>
-        <p>List description goes here. This is a brief overview of what the list is about.</p>
-        <button type="button">View List</button>
-      </div>
+      <p class="list-subtitle">Build ranked collections for films, books, snacks, workouts, or anything else.</p>
+
+      <form class="create-list-form" id="create-list-form">
+        <div class="create-list-field">
+          <label for="list-title">List name</label>
+          <input id="list-title" name="title" type="text" required maxlength="60" placeholder="List Name">
+        </div>
+
+        <div class="create-list-field">
+          <label for="list-description">Description</label>
+          <input id="list-description" name="description" type="text" maxlength="140" placeholder="Optional notes for your list">
+        </div>
+
+        <button type="submit">Create List</button>
+      </form>
+
+      <p class="empty-list-state" id="empty-list-state">No lists yet. Create your first list.</p>
+
+      <div class="list-grid" id="list-grid" aria-live="polite"></div>
     </div>
+
+    <script src="sort-io.js"></script>
 </body>
 </html>

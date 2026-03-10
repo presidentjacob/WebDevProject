@@ -1,36 +1,79 @@
-const logItemButton = document.querySelector(".new-item");
-const itemFormPanel = document.querySelector("#item-form-panel");
-const closeFormButton = document.querySelector(".close-form");
+const STORAGE_KEY = "sortio-lists";
 
-function setFormOpenState(isOpen) {
-	if (!itemFormPanel) {
+const createListForm = document.querySelector("#create-list-form");
+const listTitleInput = document.querySelector("#list-title");
+const listDescriptionInput = document.querySelector("#list-description");
+const listGrid = document.querySelector("#list-grid");
+const emptyListState = document.querySelector("#empty-list-state");
+const newListShortcut = document.querySelector("#new-list-shortcut");
+
+function readLists() {
+	const storedLists = localStorage.getItem(STORAGE_KEY);
+	if (!storedLists) {
+		return [];
+	}
+
+	try {
+		const parsed = JSON.parse(storedLists);
+		return Array.isArray(parsed) ? parsed : [];
+	} catch {
+		return [];
+	}
+}
+
+function saveLists(lists) {
+	localStorage.setItem(STORAGE_KEY, JSON.stringify(lists));
+}
+
+function createCardMarkup(list) {
+	return `
+		<article class="list-card">
+			<h2>${list.title}</h2>
+			<p>${list.description || "No description yet."}</p>
+			<button type="button">View List</button>
+		</article>
+	`;
+}
+
+function renderLists(lists) {
+	if (!listGrid || !emptyListState) {
 		return;
 	}
 
-	itemFormPanel.classList.toggle("is-open", isOpen);
-	itemFormPanel.setAttribute("aria-hidden", String(!isOpen));
+	emptyListState.style.display = lists.length === 0 ? "block" : "none";
+	listGrid.innerHTML = lists.map(createCardMarkup).join("");
 }
 
-if (logItemButton && itemFormPanel) {
-	logItemButton.addEventListener("click", () => {
-		setFormOpenState(true);
-	});
+if (createListForm && listTitleInput && listDescriptionInput) {
+	let lists = readLists();
+	renderLists(lists);
 
-	itemFormPanel.addEventListener("click", (event) => {
-		if (event.target === itemFormPanel) {
-			setFormOpenState(false);
+	createListForm.addEventListener("submit", (event) => {
+		event.preventDefault();
+
+		const title = listTitleInput.value.trim();
+		const description = listDescriptionInput.value.trim();
+		if (!title) {
+			listTitleInput.focus();
+			return;
 		}
+
+		const newList = {
+			title,
+			description,
+			id: `${Date.now()}-${Math.random().toString(16).slice(2)}`
+		};
+
+		lists = [...lists, newList];
+		saveLists(lists);
+		renderLists(lists);
+		createListForm.reset();
+		listTitleInput.focus();
 	});
 }
 
-if (closeFormButton) {
-	closeFormButton.addEventListener("click", () => {
-		setFormOpenState(false);
+if (newListShortcut && listTitleInput) {
+	newListShortcut.addEventListener("click", () => {
+		listTitleInput.focus();
 	});
 }
-
-document.addEventListener("keydown", (event) => {
-	if (event.key === "Escape") {
-		setFormOpenState(false);
-	}
-});
