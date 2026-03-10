@@ -29,7 +29,7 @@
       <input type="text" id="username">
       <label for="password">Password</label>
       <input type="password" id="password">
-      <button type="button" id="loginBtn">Login</button>
+      <button type="button">Login</button>
     </div>
   </div>
 
@@ -90,25 +90,6 @@
             </div>
         </form>
     </section>
-  <script>
-    document.getElementById("loginBtn").addEventListener("click", function () {
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-  
-    if(username === "" || password === ""){
-      alert("Please enter username and password");
-      return;
-    }
-  
-    // store logged in user
-    localStorage.setItem("currentUser", username);
-  
-    // redirect to collections page
-    window.location.href = "sort-io.html";
-  
-  });
-</script>
       <script src="sort-io.js"></script>
 </body>
 </html>
