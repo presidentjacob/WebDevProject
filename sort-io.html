@@ -32,6 +32,8 @@ if (!currentUser) {
     window.location.href = "index.html";
 }
 
+<button onclick="logout()">Logout</button>
+
 // If signed in → show collections
 else {
     const collectionsContainer = document.getElementById("collections");
