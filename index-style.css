@@ -188,3 +188,53 @@ nav .nav-link:hover {
     font-size: 22px;
     line-height: 1;
 }
+
+.list-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 60px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.list-section h1 {
+    grid-column: 1 / -1;
+    margin-bottom: 8px;
+}
+
+.list-card {
+    background: var(--blue);
+    border: 3px solid black;
+    padding: 16px;
+}
+
+.list-card h2 {
+    margin-bottom: 10px;
+}
+
+.list-card p {
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.list-card button {
+    border: 2px solid black;
+    background: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+    .list-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .list-section {
+        padding: 24px 20px 40px;
+        grid-template-columns: 1fr;
+    }
+}
