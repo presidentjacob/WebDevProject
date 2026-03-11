@@ -1,16 +1,34 @@
 // get collection id from the URL
 const params = new URLSearchParams(window.location.search);
 const collectionId = params.get("id");
+const STORAGE_KEY = "sortio-lists";
 
 const title = document.getElementById("collection-title");
 const container = document.getElementById("items-container");
+
+function readLists() {
+    const storedLists = localStorage.getItem(STORAGE_KEY);
+    if (!storedLists) {
+        return [];
+    }
+
+    try {
+        const parsed = JSON.parse(storedLists);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
 
 async function loadCollection(){
 
     try{
 
+        const lists = readLists();
+        const selectedList = lists.find((list) => String(list.id) === String(collectionId));
+
         // TEST DATA - remove when backend is ready
-        title.textContent = "Test Collection";
+        title.textContent = selectedList?.title || "Collection";
         const items = [
             { id: 1, name: "Item One", description: "A test description", value: 5 },
             { id: 2, name: "Item Two", description: "Another description", value: 12 },

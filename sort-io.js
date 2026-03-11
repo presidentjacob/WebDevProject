@@ -30,7 +30,7 @@ function createCardMarkup(list) {
 		<article class="list-card">
 			<h2>${list.title}</h2>
 			<p>${list.description || "No description yet."}</p>
-			<button type="button">View List</button>
+			<button type="button" onclick="window.location.href='collections.html?id=${encodeURIComponent(list.id)}'">View List</button>
 		</article>
 	`;
 }
