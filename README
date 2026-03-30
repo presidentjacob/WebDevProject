@@ -20,3 +20,27 @@ Features: Possible to add multiple collections of any item. For each object adde
 collection, we will add a description, rating, number of that item, value, and which
 collection it'll go in. Of course, make these optional to fill out in case it doesn't apply to
 that collection specifically.
+
+Backend and account setup
+
+This project now includes a simple Node.js backend with SQLite so accounts and lists
+persist across browser sessions and across devices.
+
+What was added:
+- Account creation and login endpoints
+- Password hashing with bcrypt
+- JWT token authentication
+- Per-user list storage in SQLite (`sortio.db`)
+- Frontend wiring for login/create-account and authenticated list CRUD (create + read)
+
+Quick start
+1. Install Node.js 18+.
+2. From the project folder, run: `npm install`
+3. Start the app: `npm start`
+4. Open: `http://localhost:3000`
+
+Notes
+- Use the login card on `index.html` to either log in or create an account.
+- After login, you are redirected to `sort-io.html` where lists are loaded from the backend.
+- Database file is created automatically as `sortio.db`.
+- For production, set a strong `JWT_SECRET` environment variable.

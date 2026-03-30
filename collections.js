@@ -1,31 +1,24 @@
 // get collection id from the URL
 const params = new URLSearchParams(window.location.search);
 const collectionId = params.get("id");
-const STORAGE_KEY = "sortio-lists";
 
 const title = document.getElementById("collection-title");
 const container = document.getElementById("items-container");
 
-function readLists() {
-    const storedLists = localStorage.getItem(STORAGE_KEY);
-    if (!storedLists) {
-        return [];
-    }
-
-    try {
-        const parsed = JSON.parse(storedLists);
-        return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return [];
-    }
-}
-
 async function loadCollection(){
-
     try{
+        if (!requireSignedIn()) {
+            return;
+        }
 
-        const lists = readLists();
-        const selectedList = lists.find((list) => String(list.id) === String(collectionId));
+        if (!collectionId) {
+            title.textContent = "Collection";
+            container.innerHTML = "<p>Missing collection ID.</p>";
+            return;
+        }
+
+        const result = await apiFetch(`/api/lists/${encodeURIComponent(collectionId)}`);
+        const selectedList = result.list;
 
         // TEST DATA - remove when backend is ready
         title.textContent = selectedList?.title || "Collection";
