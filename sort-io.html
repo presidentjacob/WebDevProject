@@ -10,18 +10,17 @@
 
     <nav class="navigation">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="sort-io.html" class="nav-link">Sort IO</a>
       <a href="sort-io.html" class="nav-link">Lists</a>
       <a href="profile.html" class="nav-link">Profile</a>
       <a href="#" class="nav-link">Contact Us</a>
       <a href="#" class="nav-link">About Us</a>
-      <button type="button" class="new-item" id="new-list-shortcut" aria-label="Create list" title="Create list">new list</button>
+      <button type="button" class="new-item" id="log-item-button" style="display: none;" aria-label="Log item" title="Log item">log item</button>
+      <button type="button" id="logout-button">Log Out</button>
     </nav>
 
     <div class="list-section">
       <h1>Your Lists</h1>
       <p id="session-label" class="list-subtitle"></p>
-      <button type="button" id="logout-button">Log Out</button>
       <p class="list-subtitle">Build ranked collections for films, books, snacks, workouts, or anything else.</p>
 
       <form class="create-list-form" id="create-list-form">
