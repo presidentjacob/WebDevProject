@@ -638,10 +638,19 @@ main h1 em {
     content: "";
     position: absolute;
     top: 50%;
-    width: 28%;
+    width: 14%;
     height: 1px;
     background: var(--accent-mist);
 }
 
 .divider::before { left: 0; }
 .divider::after { right: 0; }
+
+/* for about us page*/
+.box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
