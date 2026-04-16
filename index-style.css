@@ -1,4 +1,4 @@
-/* Define custom CSS variables for colors */
+/* color variables */
 :root {
     --log-green: #67288E;
     --log-green-dark: #3F054F;
@@ -10,21 +10,20 @@
     --ink: #111111;
 }
 
-/* Reset margins, padding, and set box-sizing for all elements */
+/* reset everything */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Styles for the body */
 body {
     font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     background: linear-gradient(180deg, #f8fbfd 0%, var(--page-bg) 65%);
     color: var(--ink);
 }
 
-/* Styles for the navigation bar */
+/* navbar */
 nav {
     display: flex;
     justify-content: flex-end;
@@ -36,7 +35,6 @@ nav {
     box-shadow: 0 3px 10px rgba(63, 5, 79, 0.35);
 }
 
-/* Styles for navigation links */
 nav .nav-link {
     text-decoration: none;
     color: #f8fbff;
@@ -46,13 +44,12 @@ nav .nav-link {
     transition: background-color 0.2s ease;
 }
 
-/* Hover effect for navigation links */
 nav .nav-link:hover {
     background-color: var(--accent-mist);
     color: #3F054F;
 }
 
-/* Styles for the new item button */
+/* button to add new item */
 .new-item {
     border: 2px solid #3F054F;
     background: var(--log-green);
@@ -69,13 +66,11 @@ nav .nav-link:hover {
     transition: transform 0.15s ease, background 0.2s ease;
 }
 
-/* Hover effect for the new item button */
 .new-item:hover {
     background: var(--log-green-dark);
     transform: translateY(-1px);
 }
 
-/* Styles for the top section layout */
 .top-section {
     display: flex;
     flex-direction: row;
@@ -87,7 +82,7 @@ nav .nav-link:hover {
     margin: 0 auto;
 }
 
-/* Styles for the top tagline box */
+/* the purple box at the top */
 .top-tagline {
     position: relative;
     overflow: hidden;
@@ -100,6 +95,7 @@ nav .nav-link:hover {
     box-shadow: 0 10px 24px rgba(87, 54, 102, 0.35);
 }
 
+/* decorative circles */
 .top-tagline::before {
     content: "";
     position: absolute;
@@ -135,7 +131,7 @@ nav .nav-link:hover {
     max-width: 18ch;
 }
 
-/* Styles for the login card */
+/* login form styles */
 .login-card {
     background-color: #fafdff;
     border: 2px solid var(--accent-mist);
@@ -147,7 +143,6 @@ nav .nav-link:hover {
     box-shadow: 0 8px 20px rgba(87, 54, 102, 0.2);
 }
 
-/* Styles for labels in the login card */
 .login-card label {
     display: block;
     text-align: left;
@@ -155,7 +150,6 @@ nav .nav-link:hover {
     margin-bottom: 4px;
 }
 
-/* Styles for input fields in the login card */
 .login-card input {
     width: 100%;
     padding: 12px;
@@ -166,21 +160,18 @@ nav .nav-link:hover {
     transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Focus effect for input fields */
 .login-card input:focus {
     border-color: #573666;
     outline: none;
     box-shadow: 0 0 0 3px rgba(193, 210, 220, 0.45);
 }
 
-/* Styles for the heading in the login card */
 .login-card h2 {
     margin-bottom: 15px;
     font-size: 26px;
     color: #573666;
 }
 
-/* Styles for the button in the login card */
 .login-card button {
     margin-top: 20px;
     padding: 12px 40px;
@@ -195,13 +186,12 @@ nav .nav-link:hover {
     transition: transform 0.15s ease, background 0.3s ease;
 }
 
-/* Hover effect for the login button */
 .login-card button:hover {
     background: #43274f;
     transform: translateY(-2px);
 }
 
-/* Styles for the steps section */
+/* steps section - shows how to use the site */
 .steps-section {
     display: flex;
     flex-direction: row;
@@ -211,7 +201,6 @@ nav .nav-link:hover {
     margin: 0 auto;
 }
 
-/* Styles for each step card */
 .step-card {
     background: #fafdff;
     border: 2px solid var(--accent-mist);
@@ -222,14 +211,13 @@ nav .nav-link:hover {
     box-shadow: 0 6px 14px rgba(87, 54, 102, 0.2);
 }
 
-/* Styles for step labels */
 .step-label {
     font-weight: bold;
     margin-bottom: 12px;
     color: #573666;
 }
 
-/* Styles for step images placeholder */
+/* placeholder for step images */
 .step-img {
     background: #e9f1f6;
     border: 1px dashed #573666;
@@ -250,7 +238,7 @@ nav .nav-link:hover {
     display: block;
 }
 
-/* Styles for the item form panel overlay */
+/* modal/overlay for item form */
 .item-form-panel {
     position: fixed;
     inset: 0;
@@ -262,12 +250,10 @@ nav .nav-link:hover {
     padding: 20px;
 }
 
-/* Show the form panel when open */
 .item-form-panel.is-open {
     display: flex;
 }
 
-/* Styles for the item form */
 .item-form {
     position: relative;
     width: min(900px, 100%);
@@ -278,7 +264,6 @@ nav .nav-link:hover {
     padding: 24px;
 }
 
-/* Styles for the close button */
 .close-form {
     position: absolute;
     top: 10px;
@@ -292,7 +277,7 @@ nav .nav-link:hover {
     line-height: 1;
 }
 
-/* Styles for the list section */
+/* main list area */
 .list-section {
     position: relative;
     max-width: 1200px;
@@ -307,6 +292,7 @@ nav .nav-link:hover {
     box-shadow: 0 12px 26px rgba(87, 54, 102, 0.08);
 }
 
+/* dot pattern background */
 .list-section::before {
     content: "";
     position: absolute;
@@ -318,7 +304,6 @@ nav .nav-link:hover {
     opacity: 0.4;
 }
 
-/* Styles for the main heading in list section */
 .list-section h1 {
     position: relative;
     grid-column: 1 / -1;
@@ -328,7 +313,6 @@ nav .nav-link:hover {
     letter-spacing: 0.01em;
 }
 
-/* Styles for the list subtitle */
 .list-subtitle {
     position: relative;
     grid-column: 1 / -1;
@@ -337,7 +321,7 @@ nav .nav-link:hover {
     color: #6a4a79;
 }
 
-/* Styles for the create list form */
+/* form to create a new list */
 .create-list-form {
     position: relative;
     grid-column: 1 / -1;
@@ -352,18 +336,15 @@ nav .nav-link:hover {
     box-shadow: 0 8px 18px rgba(87, 54, 102, 0.1);
 }
 
-/* Styles for form fields */
 .create-list-field {
     display: grid;
     gap: 6px;
 }
 
-/* Styles for labels in the form */
 .create-list-form label {
     font-weight: 600;
 }
 
-/* Styles for input fields in the form */
 .create-list-form input {
     width: 100%;
     padding: 10px;
@@ -374,19 +355,16 @@ nav .nav-link:hover {
     font: inherit;
 }
 
-/* Placeholder color for inputs */
 .create-list-form input::placeholder {
     color: gray;
 }
 
-/* Focus effect for form inputs */
 .create-list-form input:focus {
     outline: none;
     border-color: #573666;
     box-shadow: 0 0 0 3px rgba(193, 210, 220, 0.5);
 }
 
-/* Styles for the submit button in the form */
 .create-list-form button {
     border: 2px solid #43274f;
     border-radius: 8px;
@@ -400,13 +378,12 @@ nav .nav-link:hover {
     transition: background 0.2s ease, transform 0.15s ease;
 }
 
-/* Hover effect for the form button */
 .create-list-form button:hover {
     background: #43274f;
     transform: translateY(-1px);
 }
 
-/* Styles for the empty list state */
+/* shown when no lists exist yet */
 .empty-list-state {
     position: relative;
     grid-column: 1 / -1;
@@ -418,7 +395,6 @@ nav .nav-link:hover {
     font-weight: 600;
 }
 
-/* Styles for the list grid */
 .list-grid {
     position: relative;
     grid-column: 1 / -1;
@@ -427,7 +403,7 @@ nav .nav-link:hover {
     gap: 20px;
 }
 
-/* Styles for individual list cards */
+/* each list card */
 .list-card {
     position: relative;
     display: flex;
@@ -447,13 +423,11 @@ nav .nav-link:hover {
     box-shadow: 0 10px 22px rgba(87, 54, 102, 0.2);
 }
 
-/* Styles for headings in list cards */
 .list-card h2 {
     margin-bottom: 10px;
     color: #573666;
 }
 
-/* Styles for paragraphs in list cards */
 .list-card p {
     flex: 1;
     margin-bottom: 16px;
@@ -461,7 +435,6 @@ nav .nav-link:hover {
     color: #272463;
 }
 
-/* Styles for buttons in list cards */
 .list-card button {
     border: 2px solid #573666;
     background: var(--accent-mist);
@@ -476,7 +449,7 @@ nav .nav-link:hover {
     background: #d5e2e9;
 }
 
-/* Logout button matches nav link style */
+/* logout button - styled to match nav links */
 #logout-button {
     border: none;
     background: transparent;
@@ -495,7 +468,6 @@ nav .nav-link:hover {
     color: #3F054F;
 }
 
-/* Styles for item cards */
 .item-card {
     width: 150px;
     border: 1px solid var(--accent-mist);
@@ -506,7 +478,6 @@ nav .nav-link:hover {
     box-shadow: 0 4px 12px rgba(63, 5, 79, 0.15);
 }
 
-/* Styles for the items container */
 #items-container {
     display: flex;
     flex-direction: row;
@@ -515,7 +486,6 @@ nav .nav-link:hover {
     padding: 10px 0;
 }
 
-/* Styles for item image wrapper */
 .item-image-wrapper {
     width: 100%;
     aspect-ratio: 4 / 3;
@@ -523,14 +493,12 @@ nav .nav-link:hover {
     overflow: hidden;
 }
 
-/* Styles for item images */
 .item-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Styles for item image placeholder */
 .item-image-placeholder {
     width: 100%;
     height: 100%;
@@ -542,3 +510,138 @@ nav .nav-link:hover {
     font-size: 0.85rem;
 }
 
+/* contact page */
+
+main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 30px 80px;
+}
+
+.eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--log-green);
+    margin-bottom: 14px;
+}
+
+main h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    color: #3F054F;
+    margin-bottom: 16px;
+}
+
+main h1 em {
+    font-style: italic;
+    color: var(--log-green);
+}
+
+.subtitle {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #6a4a79;
+    max-width: 48ch;
+    margin-bottom: 40px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 36px;
+}
+
+/* contact cards */
+.card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    border: 2px solid var(--accent-mist);
+    border-left: 4px solid #573666;
+    border-radius: 12px;
+    padding: 20px 22px;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 6px 14px rgba(87, 54, 102, 0.1);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(87, 54, 102, 0.18);
+    border-left-color: var(--log-green);
+}
+
+.card-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.card > div:nth-child(2) {
+    flex: 1;
+}
+
+.card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--log-green);
+    margin-bottom: 3px;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3F054F;
+    margin-bottom: 2px;
+}
+
+.card-desc {
+    font-size: 0.875rem;
+    color: #6a4a79;
+}
+
+.card-arrow {
+    flex-shrink: 0;
+    color: #573666;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+/* divider line with text */
+.divider {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #93adbc;
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 28%;
+    height: 1px;
+    background: var(--accent-mist);
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
