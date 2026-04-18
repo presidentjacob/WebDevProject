@@ -20,38 +20,8 @@ async function loadCollection(){
         const result = await apiFetch(`/api/lists/${encodeURIComponent(collectionId)}`);
         const selectedList = result.list;
 
-        // TEST DATA - remove when backend is ready
         title.textContent = selectedList?.title || "Collection";
-        const items = [
-            { id: 1, name: "Item One", description: "A test description", value: 5 },
-            { id: 2, name: "Item Two", description: "Another description", value: 12 },
-        ];
-
-        container.innerHTML = "";
-
-        items.forEach(item => {
-
-            const card = document.createElement("div");
-            card.classList.add("item-card");
-
-            card.innerHTML = `
-                <div class="item-image-wrapper">
-                    <img
-                        src="/items/${item.id}/image"
-                        alt="${item.name}"
-                        class="item-image"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                    />
-                    <div class="item-image-placeholder" style="display:none;">No Image</div>
-                </div>
-                <h3>${item.name}</h3>
-                <p>${item.description}</p>
-                <p>Value: ${item.value}</p>
-            `;
-
-            container.appendChild(card);
-
-        });
+        container.innerHTML = "<p>No items in this list yet.</p>";
 
     }catch(error){
         console.error("Error loading collection:", error);
