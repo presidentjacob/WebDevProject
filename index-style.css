@@ -264,6 +264,51 @@ nav .nav-link:hover {
     padding: 24px;
 }
 
+.item-form h2 {
+    margin-bottom: 14px;
+    color: #573666;
+}
+
+.item-form label {
+    display: block;
+    margin: 10px 0 6px;
+    font-weight: 600;
+}
+
+.item-form input,
+.item-form select,
+.item-form textarea {
+    width: 100%;
+    border: 2px solid var(--accent-mist);
+    border-radius: 8px;
+    padding: 10px;
+    font: inherit;
+    background: #fafdff;
+}
+
+.item-form textarea {
+    resize: vertical;
+}
+
+.item-form button[type="submit"] {
+    margin-top: 14px;
+    border: 2px solid #43274f;
+    border-radius: 8px;
+    background: #573666;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+#item-form-feedback {
+    margin-top: 8px;
+    min-height: 20px;
+    color: #573666;
+    font-weight: 600;
+}
+
 .close-form {
     position: absolute;
     top: 10px;

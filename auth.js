@@ -30,15 +30,16 @@ async function apiFetch(url, options = {}) {
     }
   });
 
+  const rawText = await response.text();
   let payload = {};
   try {
-    payload = await response.json();
+    payload = rawText ? JSON.parse(rawText) : {};
   } catch {
     payload = {};
   }
 
   if (!response.ok) {
-    const message = payload.error || "Request failed";
+    const message = payload.error || rawText || `Request failed (${response.status})`;
     throw new Error(message);
   }
 

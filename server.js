@@ -11,7 +11,7 @@ const DB_PATH = path.join(__dirname, "sortio.db");
 
 const db = new sqlite3.Database(DB_PATH);
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(express.static(__dirname));
 
 function run(sql, params = []) {
@@ -68,6 +68,21 @@ async function initDb() {
       description TEXT,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
+  await run(`
+    CREATE TABLE IF NOT EXISTS items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      list_id INTEGER NOT NULL,
+      name TEXT NOT NULL,
+      photo_data_url TEXT,
+      rating INTEGER,
+      price REAL,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      notes TEXT,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (list_id) REFERENCES lists(id)
     )
   `);
 }
@@ -176,8 +191,10 @@ app.get("/api/lists", requireAuth, async (req, res) => {
 });
 
 app.post("/api/lists", requireAuth, async (req, res) => {
-  const { title, description } = req.body || {};
-  if (!title || !title.trim()) {
+  const { title, name, description } = req.body || {};
+  const normalizedTitle = String(title ?? name ?? "").trim();
+
+  if (!normalizedTitle) {
     res.status(400).json({ error: "Title is required." });
     return;
   }
@@ -185,14 +202,14 @@ app.post("/api/lists", requireAuth, async (req, res) => {
   try {
     const result = await run(
       "INSERT INTO lists (user_id, title, description) VALUES (?, ?, ?)",
-      [req.user.userId, title.trim(), (description || "").trim()]
+      [req.user.userId, normalizedTitle, (description || "").trim()]
     );
 
     const created = await get(
       "SELECT id, title, description, created_at FROM lists WHERE id = ?",
       [result.lastID]
     );
-    res.status(201).json({ list: created });
+    res.status(201).json({ list: created, id: created.id });
   } catch {
     res.status(500).json({ error: "Failed to create list." });
   }
@@ -214,6 +231,135 @@ app.get("/api/lists/:id", requireAuth, async (req, res) => {
   } catch {
     res.status(500).json({ error: "Failed to load list." });
   }
+});
+
+app.get("/api/lists/:id/items", requireAuth, async (req, res) => {
+  try {
+    const list = await get(
+      "SELECT id FROM lists WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.userId]
+    );
+
+    if (!list) {
+      res.status(404).json({ error: "List not found." });
+      return;
+    }
+
+    const items = await all(
+      `SELECT id, name, photo_data_url, rating, price, quantity, notes, created_at
+       FROM items
+       WHERE list_id = ?
+       ORDER BY created_at DESC`,
+      [req.params.id]
+    );
+
+    res.json({ items });
+  } catch {
+    res.status(500).json({ error: "Failed to load items." });
+  }
+});
+
+app.post("/api/lists/:id/items", requireAuth, async (req, res) => {
+  const { name, photoDataUrl, rating, price, quantity, notes } = req.body || {};
+  const trimmedName = String(name || "").trim();
+  const trimmedNotes = String(notes || "").trim();
+
+  if (!trimmedName) {
+    res.status(400).json({ error: "Item name is required." });
+    return;
+  }
+
+  const parsedQuantity = Number.parseInt(quantity, 10);
+  if (!Number.isInteger(parsedQuantity) || parsedQuantity < 1) {
+    res.status(400).json({ error: "Quantity must be a whole number of at least 1." });
+    return;
+  }
+
+  let parsedRating = null;
+  if (rating !== undefined && rating !== null && String(rating).trim() !== "") {
+    parsedRating = Number.parseInt(rating, 10);
+    if (!Number.isInteger(parsedRating) || parsedRating < 1 || parsedRating > 10) {
+      res.status(400).json({ error: "Rating must be an integer from 1 to 10." });
+      return;
+    }
+  }
+
+  let parsedPrice = null;
+  if (price !== undefined && price !== null && String(price).trim() !== "") {
+    parsedPrice = Number.parseFloat(price);
+    if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
+      res.status(400).json({ error: "Price must be a number of 0 or more." });
+      return;
+    }
+  }
+
+  let safePhotoDataUrl = null;
+  if (photoDataUrl) {
+    const value = String(photoDataUrl);
+    if (!value.startsWith("data:image/")) {
+      res.status(400).json({ error: "Photo must be an image file." });
+      return;
+    }
+    if (value.length > 5_000_000) {
+      res.status(400).json({ error: "Photo is too large." });
+      return;
+    }
+    safePhotoDataUrl = value;
+  }
+
+  try {
+    const list = await get(
+      "SELECT id FROM lists WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.userId]
+    );
+
+    if (!list) {
+      res.status(404).json({ error: "List not found." });
+      return;
+    }
+
+    const result = await run(
+      `INSERT INTO items (list_id, name, photo_data_url, rating, price, quantity, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        req.params.id,
+        trimmedName,
+        safePhotoDataUrl,
+        parsedRating,
+        parsedPrice,
+        parsedQuantity,
+        trimmedNotes
+      ]
+    );
+
+    const created = await get(
+      `SELECT id, name, photo_data_url, rating, price, quantity, notes, created_at
+       FROM items WHERE id = ?`,
+      [result.lastID]
+    );
+
+    res.status(201).json({ item: created });
+  } catch {
+    res.status(500).json({ error: "Failed to create item." });
+  }
+});
+
+app.use((error, req, res, next) => {
+  if (error?.type === "entity.too.large") {
+    res.status(413).json({ error: "Request body is too large. Use a smaller image." });
+    return;
+  }
+
+  if (error instanceof SyntaxError && "body" in error) {
+    res.status(400).json({ error: "Invalid JSON payload." });
+    return;
+  }
+
+  next(error);
+});
+
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: "API route not found." });
 });
 
 app.get("*", (req, res) => {

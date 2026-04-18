@@ -4,6 +4,107 @@ const collectionId = params.get("id");
 
 const title = document.getElementById("collection-title");
 const container = document.getElementById("items-container");
+const logItemButton = document.querySelector(".new-item");
+const itemFormPanel = document.getElementById("item-form-panel");
+const itemForm = document.getElementById("item-form");
+const closeItemFormButton = document.getElementById("close-item-form");
+const listSelect = document.getElementById("log-list-select");
+const itemNameInput = document.getElementById("item-name");
+const itemPhotoInput = document.getElementById("item-photo");
+const itemRatingInput = document.getElementById("item-rating");
+const itemPriceInput = document.getElementById("item-price");
+const itemQuantityInput = document.getElementById("item-quantity");
+const itemNotesInput = document.getElementById("item-notes");
+const formFeedback = document.getElementById("item-form-feedback");
+
+function formatPrice(price) {
+    if (price === null || price === undefined || Number.isNaN(Number(price))) {
+        return "No price";
+    }
+    return `$${Number(price).toFixed(2)}`;
+}
+
+function createItemMarkup(item) {
+    const imageMarkup = item.photo_data_url
+        ? `<img src="${item.photo_data_url}" alt="${item.name}" class="item-image">`
+        : `<div class="item-image-placeholder">No Image</div>`;
+
+    return `
+        <article class="item-card">
+            <div class="item-image-wrapper">${imageMarkup}</div>
+            <h3>${item.name}</h3>
+            <p>Rating: ${item.rating ?? "N/A"}</p>
+            <p>Price: ${formatPrice(item.price)}</p>
+            <p>Quantity: ${item.quantity}</p>
+            <p>${item.notes || "No notes."}</p>
+        </article>
+    `;
+}
+
+function renderItems(items) {
+    if (!container) {
+        return;
+    }
+
+    if (!items.length) {
+        container.innerHTML = "<p>No items in this list yet.</p>";
+        return;
+    }
+
+    container.innerHTML = items.map(createItemMarkup).join("");
+}
+
+async function loadListsIntoSelect(selectedListId) {
+    if (!listSelect) {
+        return;
+    }
+
+    const listsResult = await apiFetch("/api/lists");
+    const lists = listsResult.lists || [];
+
+    listSelect.innerHTML = lists
+        .map((list) => {
+            const selected = String(list.id) === String(selectedListId) ? " selected" : "";
+            return `<option value="${list.id}"${selected}>${list.title}</option>`;
+        })
+        .join("");
+}
+
+async function loadItems(listId) {
+    const itemsResult = await apiFetch(`/api/lists/${encodeURIComponent(listId)}/items`);
+    renderItems(itemsResult.items || []);
+}
+
+function openItemForm() {
+    if (!itemFormPanel) {
+        return;
+    }
+    itemFormPanel.classList.add("is-open");
+    itemFormPanel.setAttribute("aria-hidden", "false");
+    if (formFeedback) {
+        formFeedback.textContent = "";
+    }
+    if (itemNameInput) {
+        itemNameInput.focus();
+    }
+}
+
+function closeItemForm() {
+    if (!itemFormPanel) {
+        return;
+    }
+    itemFormPanel.classList.remove("is-open");
+    itemFormPanel.setAttribute("aria-hidden", "true");
+}
+
+function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("Failed to read photo."));
+        reader.readAsDataURL(file);
+    });
+}
 
 async function loadCollection(){
     try{
@@ -21,13 +122,95 @@ async function loadCollection(){
         const selectedList = result.list;
 
         title.textContent = selectedList?.title || "Collection";
-        container.innerHTML = "<p>No items in this list yet.</p>";
+        await loadListsIntoSelect(collectionId);
+        await loadItems(collectionId);
 
     }catch(error){
         console.error("Error loading collection:", error);
         container.innerHTML = "<p>Failed to load collection.</p>";
     }
 
+}
+
+if (logItemButton) {
+    logItemButton.addEventListener("click", () => {
+        openItemForm();
+    });
+}
+
+if (closeItemFormButton) {
+    closeItemFormButton.addEventListener("click", closeItemForm);
+}
+
+if (itemFormPanel) {
+    itemFormPanel.addEventListener("click", (event) => {
+        if (event.target === itemFormPanel) {
+            closeItemForm();
+        }
+    });
+}
+
+if (itemForm) {
+    itemForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!collectionId) {
+            return;
+        }
+
+        const listId = listSelect?.value || collectionId;
+        const name = itemNameInput?.value.trim() || "";
+        const rating = itemRatingInput?.value || "";
+        const price = itemPriceInput?.value || "";
+        const quantity = itemQuantityInput?.value || "1";
+        const notes = itemNotesInput?.value.trim() || "";
+
+        if (!name) {
+            if (formFeedback) {
+                formFeedback.textContent = "Item name is required.";
+            }
+            return;
+        }
+
+        try {
+            let photoDataUrl = null;
+            const file = itemPhotoInput?.files?.[0];
+            if (file) {
+                photoDataUrl = await readFileAsDataUrl(file);
+            }
+
+            await apiFetch(`/api/lists/${encodeURIComponent(listId)}/items`, {
+                method: "POST",
+                body: JSON.stringify({
+                    name,
+                    photoDataUrl,
+                    rating,
+                    price,
+                    quantity,
+                    notes
+                })
+            });
+
+            if (formFeedback) {
+                formFeedback.textContent = "Item saved.";
+            }
+
+            itemForm.reset();
+            if (itemQuantityInput) {
+                itemQuantityInput.value = "1";
+            }
+
+            if (String(listId) === String(collectionId)) {
+                await loadItems(collectionId);
+            }
+
+            closeItemForm();
+        } catch (error) {
+            if (formFeedback) {
+                formFeedback.textContent = error.message || "Failed to save item.";
+            }
+        }
+    });
 }
 
 loadCollection();
