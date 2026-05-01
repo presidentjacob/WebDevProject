@@ -23,6 +23,19 @@
 
     <h1 id="collection-title"></h1>
 
+    <div class="item-toolbar">
+      <label for="item-sort-select">Sort items</label>
+      <select id="item-sort-select" aria-label="Sort items">
+        <option value="newest">Newest</option>
+        <option value="rating-desc">Rating: High to low</option>
+        <option value="rating-asc">Rating: Low to high</option>
+        <option value="quantity-desc">Quantity: High to low</option>
+        <option value="quantity-asc">Quantity: Low to high</option>
+        <option value="price-desc">Price: High to low</option>
+        <option value="price-asc">Price: Low to high</option>
+      </select>
+    </div>
+
     <div id="items-container"></div>
 
     <div id="item-form-panel" class="item-form-panel" aria-hidden="true">

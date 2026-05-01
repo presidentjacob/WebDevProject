@@ -15,10 +15,12 @@ const itemRatingInput = document.getElementById("item-rating");
 const itemPriceInput = document.getElementById("item-price");
 const itemQuantityInput = document.getElementById("item-quantity");
 const itemNotesInput = document.getElementById("item-notes");
+const itemSortSelect = document.getElementById("item-sort-select");
 const formFeedback = document.getElementById("item-form-feedback");
 const formHeading = itemForm?.querySelector("h2");
 const itemSubmitButton = itemForm?.querySelector('button[type="submit"]');
 
+let allItems = [];
 let renderedItems = [];
 let editingItem = null;
 
@@ -63,6 +65,50 @@ function renderItems(items) {
     }
 
     container.innerHTML = items.map(createItemMarkup).join("");
+}
+
+function toSortableNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+}
+
+function sortItems(items, sortValue) {
+    const sorted = [...items];
+
+    if (sortValue === "newest") {
+        return sorted;
+    }
+
+    const [field, direction] = String(sortValue || "").split("-");
+    if (!field || !direction) {
+        return sorted;
+    }
+
+    const directionMultiplier = direction === "asc" ? 1 : -1;
+
+    sorted.sort((a, b) => {
+        const aValue = toSortableNumber(a[field]);
+        const bValue = toSortableNumber(b[field]);
+
+        if (aValue === null && bValue === null) {
+            return 0;
+        }
+        if (aValue === null) {
+            return 1;
+        }
+        if (bValue === null) {
+            return -1;
+        }
+
+        return (aValue - bValue) * directionMultiplier;
+    });
+
+    return sorted;
+}
+
+function applyCurrentSort() {
+    const sortValue = itemSortSelect?.value || "newest";
+    renderItems(sortItems(allItems, sortValue));
 }
 
 function setFormMode(isEditing) {
@@ -169,7 +215,8 @@ async function loadListsIntoSelect(selectedListId) {
 
 async function loadItems(listId) {
     const itemsResult = await apiFetch(`/api/lists/${encodeURIComponent(listId)}/items`);
-    renderItems(itemsResult.items || []);
+    allItems = itemsResult.items || [];
+    applyCurrentSort();
 }
 
 function openItemForm() {
@@ -266,6 +313,12 @@ if (container) {
         } catch (error) {
             alert(error.message || "Failed to delete item.");
         }
+    });
+}
+
+if (itemSortSelect) {
+    itemSortSelect.addEventListener("change", () => {
+        applyCurrentSort();
     });
 }
 

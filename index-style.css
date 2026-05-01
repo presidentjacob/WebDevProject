@@ -580,6 +580,37 @@ nav .nav-link:hover {
     padding: 10px 0;
 }
 
+.item-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #edf4f8;
+    border: 2px solid #573666;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin: 6px 0 2px;
+}
+
+.item-toolbar label {
+    font-weight: 600;
+    color: #43274f;
+}
+
+.item-toolbar select {
+    border: 2px solid var(--accent-mist);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+    background: #ffffff;
+    color: var(--ink);
+}
+
+.item-toolbar select:focus {
+    outline: none;
+    border-color: #573666;
+    box-shadow: 0 0 0 3px rgba(193, 210, 220, 0.5);
+}
+
 .item-image-wrapper {
     width: 100%;
     aspect-ratio: 4 / 3;
@@ -663,6 +694,15 @@ nav .nav-link:hover {
 
     .item-actions {
         flex-direction: column;
+    }
+
+    .item-toolbar {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .item-toolbar select {
+        width: 58%;
     }
 }
 
