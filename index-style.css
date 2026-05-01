@@ -256,25 +256,104 @@ nav .nav-link:hover {
 
 .item-form {
     position: relative;
-    width: min(900px, 100%);
-    background: white;
-    border: 2px solid #CAA8F5;
+    width: min(560px, 100%);
+    background: #fafdff;
+    border: 2px solid var(--accent-mist);
+    border-top: 4px solid #573666;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(63, 5, 79, 0.2);
-    padding: 24px;
+    box-shadow: 0 10px 24px rgba(87, 54, 102, 0.25);
+    padding: 26px 24px 22px;
+    display: grid;
+    gap: 8px;
 }
 
 .close-form {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
     width: 32px;
     height: 32px;
-    border: 2px solid #CAA8F5;
-    background: white;
+    border: 2px solid #573666;
+    border-radius: 999px;
+    background: #edf4f8;
+    color: #43274f;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 1;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.close-form:hover {
+    background: #d5e2e9;
+    transform: translateY(-1px);
+}
+
+#item-form h2 {
+    color: #573666;
+    margin-bottom: 6px;
+    padding-right: 36px;
+}
+
+#item-form label {
+    font-weight: 600;
+    color: #43274f;
+    margin-top: 4px;
+}
+
+#item-form input,
+#item-form select,
+#item-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--accent-mist);
+    border-radius: 6px;
+    background: white;
+    color: var(--ink);
+    font: inherit;
+}
+
+#item-form textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+#item-form input:focus,
+#item-form select:focus,
+#item-form textarea:focus {
+    outline: none;
+    border-color: #573666;
+    box-shadow: 0 0 0 3px rgba(193, 210, 220, 0.5);
+}
+
+#item-form input[type="file"] {
+    padding: 8px;
+    background: #edf4f8;
+}
+
+#item-form button[type="submit"] {
+    justify-self: start;
+    margin-top: 8px;
+    border: 2px solid #43274f;
+    border-radius: 8px;
+    background: #573666;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(87, 54, 102, 0.35);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+#item-form button[type="submit"]:hover {
+    background: #43274f;
+    transform: translateY(-1px);
+}
+
+#item-form-feedback {
+    min-height: 20px;
+    color: #573666;
+    font-weight: 600;
 }
 
 /* main list area */
@@ -469,13 +548,28 @@ nav .nav-link:hover {
 }
 
 .item-card {
-    width: 150px;
-    border: 1px solid var(--accent-mist);
-    border-radius: 10px;
+    width: 220px;
+    border: 2px solid var(--accent-mist);
+    border-top: 4px solid #573666;
+    border-radius: 12px;
     overflow: hidden;
-    padding: 10px;
+    padding: 12px;
     background: #fafdff;
-    box-shadow: 0 4px 12px rgba(63, 5, 79, 0.15);
+    box-shadow: 0 6px 14px rgba(87, 54, 102, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.item-card h3 {
+    color: #573666;
+    margin-top: 4px;
+}
+
+.item-card p {
+    color: #272463;
+    line-height: 1.35;
+    font-size: 0.92rem;
 }
 
 #items-container {
@@ -508,6 +602,68 @@ nav .nav-link:hover {
     justify-content: center;
     color: #573666;
     font-size: 0.85rem;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.edit-item-button,
+.delete-item-button {
+    flex: 1;
+    border: 2px solid #573666;
+    border-radius: 999px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.edit-item-button {
+    background: var(--accent-mist);
+    color: #43274f;
+}
+
+.edit-item-button:hover {
+    background: #d5e2e9;
+    transform: translateY(-1px);
+}
+
+.delete-item-button {
+    background: #fff0f4;
+    border-color: #8b2f57;
+    color: #8b2f57;
+}
+
+.delete-item-button:hover {
+    background: #ffdce8;
+    transform: translateY(-1px);
+}
+
+.edit-item-button:focus-visible,
+.delete-item-button:focus-visible,
+.close-form:focus-visible,
+#item-form button[type="submit"]:focus-visible {
+    outline: 3px solid rgba(193, 210, 220, 0.85);
+    outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+    .item-form {
+        padding: 20px 16px 16px;
+    }
+
+    .item-card {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .item-actions {
+        flex-direction: column;
+    }
 }
 
 /* contact page */

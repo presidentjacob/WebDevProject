@@ -344,6 +344,136 @@ app.post("/api/lists/:id/items", requireAuth, async (req, res) => {
   }
 });
 
+app.put("/api/lists/:id/items/:itemId", requireAuth, async (req, res) => {
+  const { name, photoDataUrl, rating, price, quantity, notes } = req.body || {};
+  const trimmedName = String(name || "").trim();
+  const trimmedNotes = String(notes || "").trim();
+
+  if (!trimmedName) {
+    res.status(400).json({ error: "Item name is required." });
+    return;
+  }
+
+  const parsedQuantity = Number.parseInt(quantity, 10);
+  if (!Number.isInteger(parsedQuantity) || parsedQuantity < 1) {
+    res.status(400).json({ error: "Quantity must be a whole number of at least 1." });
+    return;
+  }
+
+  let parsedRating = null;
+  if (rating !== undefined && rating !== null && String(rating).trim() !== "") {
+    parsedRating = Number.parseInt(rating, 10);
+    if (!Number.isInteger(parsedRating) || parsedRating < 1 || parsedRating > 10) {
+      res.status(400).json({ error: "Rating must be an integer from 1 to 10." });
+      return;
+    }
+  }
+
+  let parsedPrice = null;
+  if (price !== undefined && price !== null && String(price).trim() !== "") {
+    parsedPrice = Number.parseFloat(price);
+    if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
+      res.status(400).json({ error: "Price must be a number of 0 or more." });
+      return;
+    }
+  }
+
+  try {
+    const list = await get(
+      "SELECT id FROM lists WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.userId]
+    );
+
+    if (!list) {
+      res.status(404).json({ error: "List not found." });
+      return;
+    }
+
+    const existingItem = await get(
+      "SELECT id, photo_data_url FROM items WHERE id = ? AND list_id = ?",
+      [req.params.itemId, req.params.id]
+    );
+
+    if (!existingItem) {
+      res.status(404).json({ error: "Item not found." });
+      return;
+    }
+
+    let safePhotoDataUrl = existingItem.photo_data_url;
+    if (Object.prototype.hasOwnProperty.call(req.body || {}, "photoDataUrl")) {
+      if (photoDataUrl === null || String(photoDataUrl).trim() === "") {
+        safePhotoDataUrl = null;
+      } else {
+        const value = String(photoDataUrl);
+        if (!value.startsWith("data:image/")) {
+          res.status(400).json({ error: "Photo must be an image file." });
+          return;
+        }
+        if (value.length > 5_000_000) {
+          res.status(400).json({ error: "Photo is too large." });
+          return;
+        }
+        safePhotoDataUrl = value;
+      }
+    }
+
+    await run(
+      `UPDATE items
+       SET name = ?, photo_data_url = ?, rating = ?, price = ?, quantity = ?, notes = ?
+       WHERE id = ? AND list_id = ?`,
+      [
+        trimmedName,
+        safePhotoDataUrl,
+        parsedRating,
+        parsedPrice,
+        parsedQuantity,
+        trimmedNotes,
+        req.params.itemId,
+        req.params.id
+      ]
+    );
+
+    const updated = await get(
+      `SELECT id, name, photo_data_url, rating, price, quantity, notes, created_at
+       FROM items WHERE id = ?`,
+      [req.params.itemId]
+    );
+
+    res.json({ item: updated });
+  } catch {
+    res.status(500).json({ error: "Failed to update item." });
+  }
+});
+
+app.delete("/api/lists/:id/items/:itemId", requireAuth, async (req, res) => {
+  try {
+    const list = await get(
+      "SELECT id FROM lists WHERE id = ? AND user_id = ?",
+      [req.params.id, req.user.userId]
+    );
+
+    if (!list) {
+      res.status(404).json({ error: "List not found." });
+      return;
+    }
+
+    const item = await get(
+      "SELECT id FROM items WHERE id = ? AND list_id = ?",
+      [req.params.itemId, req.params.id]
+    );
+
+    if (!item) {
+      res.status(404).json({ error: "Item not found." });
+      return;
+    }
+
+    await run("DELETE FROM items WHERE id = ? AND list_id = ?", [req.params.itemId, req.params.id]);
+    res.status(204).send();
+  } catch {
+    res.status(500).json({ error: "Failed to delete item." });
+  }
+});
+
 app.use((error, req, res, next) => {
   if (error?.type === "entity.too.large") {
     res.status(413).json({ error: "Request body is too large. Use a smaller image." });

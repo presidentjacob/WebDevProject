@@ -16,6 +16,11 @@ const itemPriceInput = document.getElementById("item-price");
 const itemQuantityInput = document.getElementById("item-quantity");
 const itemNotesInput = document.getElementById("item-notes");
 const formFeedback = document.getElementById("item-form-feedback");
+const formHeading = itemForm?.querySelector("h2");
+const itemSubmitButton = itemForm?.querySelector('button[type="submit"]');
+
+let renderedItems = [];
+let editingItem = null;
 
 function formatPrice(price) {
     if (price === null || price === undefined || Number.isNaN(Number(price))) {
@@ -37,6 +42,10 @@ function createItemMarkup(item) {
             <p>Price: ${formatPrice(item.price)}</p>
             <p>Quantity: ${item.quantity}</p>
             <p>${item.notes || "No notes."}</p>
+            <div class="item-actions">
+                <button type="button" class="edit-item-button" data-item-id="${item.id}">Edit</button>
+                <button type="button" class="delete-item-button" data-item-id="${item.id}">Delete</button>
+            </div>
         </article>
     `;
 }
@@ -46,12 +55,100 @@ function renderItems(items) {
         return;
     }
 
+    renderedItems = items;
+
     if (!items.length) {
         container.innerHTML = "<p>No items in this list yet.</p>";
         return;
     }
 
     container.innerHTML = items.map(createItemMarkup).join("");
+}
+
+function setFormMode(isEditing) {
+    if (formHeading) {
+        formHeading.textContent = isEditing ? "Edit Item" : "Log Item";
+    }
+
+    if (itemSubmitButton) {
+        itemSubmitButton.textContent = isEditing ? "Update Item" : "Save Item";
+    }
+}
+
+function resetFormToCreateMode() {
+    editingItem = null;
+    setFormMode(false);
+
+    if (listSelect) {
+        listSelect.disabled = false;
+        listSelect.value = collectionId || listSelect.value;
+    }
+
+    if (itemForm) {
+        itemForm.reset();
+    }
+
+    if (itemQuantityInput) {
+        itemQuantityInput.value = "1";
+    }
+}
+
+function startEditingItem(itemId) {
+    const target = renderedItems.find((item) => String(item.id) === String(itemId));
+    if (!target) {
+        return;
+    }
+
+    editingItem = target;
+    setFormMode(true);
+
+    if (listSelect) {
+        listSelect.value = String(collectionId);
+        listSelect.disabled = true;
+    }
+
+    if (itemNameInput) {
+        itemNameInput.value = target.name || "";
+    }
+
+    if (itemRatingInput) {
+        itemRatingInput.value = target.rating ?? "";
+    }
+
+    if (itemPriceInput) {
+        itemPriceInput.value = target.price ?? "";
+    }
+
+    if (itemQuantityInput) {
+        itemQuantityInput.value = target.quantity ?? "1";
+    }
+
+    if (itemNotesInput) {
+        itemNotesInput.value = target.notes || "";
+    }
+
+    if (itemPhotoInput) {
+        itemPhotoInput.value = "";
+    }
+
+    if (formFeedback) {
+        formFeedback.textContent = "";
+    }
+
+    openItemForm();
+}
+
+async function deleteItem(itemId) {
+    const confirmed = window.confirm("Delete this item from the list?");
+    if (!confirmed) {
+        return;
+    }
+
+    await apiFetch(`/api/lists/${encodeURIComponent(collectionId)}/items/${encodeURIComponent(itemId)}`, {
+        method: "DELETE"
+    });
+
+    await loadItems(collectionId);
 }
 
 async function loadListsIntoSelect(selectedListId) {
@@ -95,6 +192,7 @@ function closeItemForm() {
     }
     itemFormPanel.classList.remove("is-open");
     itemFormPanel.setAttribute("aria-hidden", "true");
+    resetFormToCreateMode();
 }
 
 function readFileAsDataUrl(file) {
@@ -150,6 +248,27 @@ if (itemFormPanel) {
     });
 }
 
+if (container) {
+    container.addEventListener("click", async (event) => {
+        const editButton = event.target.closest(".edit-item-button");
+        if (editButton) {
+            startEditingItem(editButton.dataset.itemId);
+            return;
+        }
+
+        const deleteButton = event.target.closest(".delete-item-button");
+        if (!deleteButton) {
+            return;
+        }
+
+        try {
+            await deleteItem(deleteButton.dataset.itemId);
+        } catch (error) {
+            alert(error.message || "Failed to delete item.");
+        }
+    });
+}
+
 if (itemForm) {
     itemForm.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -179,11 +298,16 @@ if (itemForm) {
                 photoDataUrl = await readFileAsDataUrl(file);
             }
 
-            await apiFetch(`/api/lists/${encodeURIComponent(listId)}/items`, {
-                method: "POST",
+            const method = editingItem ? "PUT" : "POST";
+            const endpoint = editingItem
+                ? `/api/lists/${encodeURIComponent(listId)}/items/${encodeURIComponent(editingItem.id)}`
+                : `/api/lists/${encodeURIComponent(listId)}/items`;
+
+            await apiFetch(endpoint, {
+                method,
                 body: JSON.stringify({
                     name,
-                    photoDataUrl,
+                    photoDataUrl: photoDataUrl ?? editingItem?.photo_data_url ?? null,
                     rating,
                     price,
                     quantity,
@@ -192,12 +316,7 @@ if (itemForm) {
             });
 
             if (formFeedback) {
-                formFeedback.textContent = "Item saved.";
-            }
-
-            itemForm.reset();
-            if (itemQuantityInput) {
-                itemQuantityInput.value = "1";
+                formFeedback.textContent = editingItem ? "Item updated." : "Item saved.";
             }
 
             if (String(listId) === String(collectionId)) {
@@ -213,4 +332,5 @@ if (itemForm) {
     });
 }
 
+resetFormToCreateMode();
 loadCollection();
