@@ -8,10 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "change-this-in-production";
 const DB_PATH = path.join(__dirname, "sortio.db");
+const JSON_BODY_LIMIT = "15mb";
+const MAX_PHOTO_DATA_URL_LENGTH = 12_000_000;
 
 const db = new sqlite3.Database(DB_PATH);
 
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: JSON_BODY_LIMIT }));
 app.use(express.static(__dirname));
 
 function run(sql, params = []) {
@@ -48,6 +50,23 @@ function all(sql, params = []) {
       resolve(rows);
     });
   });
+}
+
+function normalizePhotoDataUrl(photoDataUrl) {
+  if (!photoDataUrl) {
+    return { value: null, error: null };
+  }
+
+  const value = String(photoDataUrl);
+  if (!value.startsWith("data:image/")) {
+    return { value: null, error: "Photo must be an image file." };
+  }
+
+  if (value.length > MAX_PHOTO_DATA_URL_LENGTH) {
+    return { value: null, error: "Photo is too large." };
+  }
+
+  return { value, error: null };
 }
 
 async function initDb() {
@@ -293,19 +312,13 @@ app.post("/api/lists/:id/items", requireAuth, async (req, res) => {
     }
   }
 
-  let safePhotoDataUrl = null;
-  if (photoDataUrl) {
-    const value = String(photoDataUrl);
-    if (!value.startsWith("data:image/")) {
-      res.status(400).json({ error: "Photo must be an image file." });
-      return;
-    }
-    if (value.length > 5_000_000) {
-      res.status(400).json({ error: "Photo is too large." });
-      return;
-    }
-    safePhotoDataUrl = value;
+  const createPhoto = normalizePhotoDataUrl(photoDataUrl);
+  if (createPhoto.error) {
+    res.status(400).json({ error: createPhoto.error });
+    return;
   }
+
+  const safePhotoDataUrl = createPhoto.value;
 
   try {
     const list = await get(
@@ -404,16 +417,12 @@ app.put("/api/lists/:id/items/:itemId", requireAuth, async (req, res) => {
       if (photoDataUrl === null || String(photoDataUrl).trim() === "") {
         safePhotoDataUrl = null;
       } else {
-        const value = String(photoDataUrl);
-        if (!value.startsWith("data:image/")) {
-          res.status(400).json({ error: "Photo must be an image file." });
+        const updatePhoto = normalizePhotoDataUrl(photoDataUrl);
+        if (updatePhoto.error) {
+          res.status(400).json({ error: updatePhoto.error });
           return;
         }
-        if (value.length > 5_000_000) {
-          res.status(400).json({ error: "Photo is too large." });
-          return;
-        }
-        safePhotoDataUrl = value;
+        safePhotoDataUrl = updatePhoto.value;
       }
     }
 
@@ -476,7 +485,7 @@ app.delete("/api/lists/:id/items/:itemId", requireAuth, async (req, res) => {
 
 app.use((error, req, res, next) => {
   if (error?.type === "entity.too.large") {
-    res.status(413).json({ error: "Request body is too large. Use a smaller image." });
+    res.status(413).json({ error: "Request body is too large. Keep uploads under 15 MB." });
     return;
   }
 

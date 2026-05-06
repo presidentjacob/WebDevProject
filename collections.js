@@ -19,6 +19,7 @@ const itemSortSelect = document.getElementById("item-sort-select");
 const formFeedback = document.getElementById("item-form-feedback");
 const formHeading = itemForm?.querySelector("h2");
 const itemSubmitButton = itemForm?.querySelector('button[type="submit"]');
+const MAX_IMAGE_FILE_BYTES = 8 * 1024 * 1024;
 
 let allItems = [];
 let renderedItems = [];
@@ -348,6 +349,12 @@ if (itemForm) {
             let photoDataUrl = null;
             const file = itemPhotoInput?.files?.[0];
             if (file) {
+                if (file.size > MAX_IMAGE_FILE_BYTES) {
+                    if (formFeedback) {
+                        formFeedback.textContent = "Image is too large. Please use a file under 8 MB.";
+                    }
+                    return;
+                }
                 photoDataUrl = await readFileAsDataUrl(file);
             }
 
